@@ -1,1 +1,521 @@
-# Cut-to-design
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Handcrafted Laser-Cut Architectural Models</title>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      background: #f9fafb;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    a 
+    @keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.hero {
+  animation: fadeIn 1s ease-in-out;
+}
+    a:hover {
+      color: #063d6b;
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.3rem;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 3px solid #0954a2;
+      display: inline-block;
+      padding-bottom: 0.25rem;
+      margin-top: 3rem;
+    }
+    h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: #444;
+    }
+    p {
+      margin: 0 0 1rem 0;
+      max-width: 700px;
+    }
+    .container {
+      width: 90%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1rem 0 3rem 0;
+    }
+    button {
+      background: #0954a2;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background: #063d6b;
+    }
+    nav {
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin-left: 1.75rem;
+    }
+    nav ul li:first-child {
+      margin-left: 0;
+    }
+    section {
+      padding: 3rem 0 5rem 0;
+      border-bottom: 1px solid #ddd;
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+    }
+    .hero {
+      background: linear-gradient(135deg, #0e4a8a, #1980e0);
+      color: white;
+      text-align: center;
+      padding: 6rem 1rem 4rem 1rem;
+      border-radius: 0 0 50% 50% / 30%;
+      box-shadow: 0 12px 30px rgb(24 56 114 / 0.8);
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      text-shadow: 1px 1px 8px rgba(0,0,0,0.35);
+    }
+    .hero h2 {
+      font-weight: 400;
+      font-size: 1.5rem;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+    section p.lead {
+      font-size: 1.15rem;
+      color: #555;
+      max-width: 650px;
+      margin: 0 auto 2rem auto;
+    }
+    .btn-primary {
+      display: inline-block;
+      margin: 1rem auto 0;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 8px 16px rgba(9, 84, 162, 0.45);
+    }
+    /* Showcase grid */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .showcase-item {
+      background: #fafafa;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgb(0 0 0 / 0.06);
+      overflow: hidden;
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .showcase-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 25px rgb(0 0 0 / 0.12);
+    }
+    .showcase-image {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      background: #ddd;
+      user-select: none;
+      pointer-events: none;
+    }
+    .showcase-title {
+      margin: 0.75rem 0 1rem 0;
+      font-weight: 600;
+      color: #0954a2;
+    }
+    /* Zoom overlay */
+    .zoom-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      cursor: zoom-out;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .zoom-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .zoom-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 12px 32px rgb(0 0 0 / 0.45);
+      user-select: none;
+      pointer-events: auto;
+    }
+    /* Two column layout for sections */
+    .two-col {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .two-col > div {
+      flex: 1 1 320px;
+      max-width: 450px;
+    }
+    /* Lists styling */
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      color: #444;
+    }
+    ul li {
+      margin-bottom: 0.5rem;
+    }
+    /* Testimonials */
+    .testimonial {
+      background: #e7f0ff;
+      border-left: 5px solid #0954a2;
+      padding: 1rem 1.5rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+      font-style: italic;
+      color: #1a1a1a;
+      box-shadow: 0 2px 10px rgb(9 84 162 / 0.15);
+    }
+    .testimonial strong {
+      display: block;
+      margin-top: 0.75rem;
+      font-weight: 600;
+      font-style: normal;
+      color: #063d6b;
+    }
+    /* Forms */
+    form {
+      max-width: 400px;
+      margin-top: 1rem;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type="email"]:focus {
+      border-color: #0954a2;
+      outline: none;
+      box-shadow: 0 0 6px #0954a2aa;
+    }
+    /* Footer */
+    footer {
+      background: #0954a2;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.95rem;
+      margin-top: 3rem;
+      border-radius: 0 0 10px 10px;
+      user-select: none;
+    }
+    footer a {
+      color: #c3daf9;
+      margin-left: 0.5rem;
+    }
+    footer a:hover {
+      color: white;
+    }
+    /* Responsive */
+    @media(max-width: 600px) {
+      h1 {
+        font-size: 2.3rem;
+      }
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      nav ul li {
+        margin-left: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      .two-col {
+        flex-direction: column;
+        align-items: center;
+      }
+      section {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="#hero" aria-label="Jump to top"><strong>ArtLaserModels</strong></a>
+      <ul>
+        <li><a href="#showcase">Showcase</a></li>
+        <li><a href="#art-of-laser-cutting">The Art</a></li>
+        <li><a href="#materials">Sustainability</a></li>
+        <li><a href="#custom-designs">Custom Designs</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#stay-connected">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero" id="hero">
+    <div class="container">
+      <h1>YOU TELL THE BEAUTY OF ART</h1>
+      <h2>~We are the ones to made it for "YOU"</h2>
+      <p class="lead">Discover the beauty and precision of handcrafted laser-cut models inspired by famous temples and buildings worldwide. Each design reflects architectural elegance combined with artisanal skill.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="showcase" aria-label="Showcase of Exquisite Laser-Cut Designs">
+      <h2>Showcase: Exquisite Laser-Cut Designs</h2>
+      <p>Explore stunning models like <strong>JAI MAHAKALESHWAR TEMPLE</strong>, <strong>YAMNOTRI TEMPLE</strong> and more. Each piece is meticulously crafted with precision to capture intricate architectural details.</p>
+      <p>Materials include premium birch plywood and clear acrylic, chosen for durability and aesthetic quality. Zoom functionality allows you to see the finest engravings and assembly work.</p>
+
+      <div class="showcase-grid" role="list" aria-label="Laser cut architectural models">
+        <div class="showcase-item" role="listitem" tabindex="0" aria-describedby="desc-jai">
+          <img src="https://assets.onecompiler.app/43k6yjsns/43k6yjdrv/UUSU1424.JPG" alt="Model of Jai Mahakaleshwar Temple" class="showcase-image" loading="lazy" />
+          <h3 class="showcase-title">JAI MAHAKALESHWAR TEMPLE</h3>
+          <p id="desc-jai" class="sr-only">A finely detailed handcrafted laser-cut model of Jai Mahakaleshwar Temple.</p>
+        </div>
+        <div class="showcase-item" role="listitem" tabindex="0" aria-describedby="desc-yamnotri">
+          <img src="https://assets.onecompiler.app/43k6yjsns/43k6yjdrv/BLLN5929.JPG" alt="Model of Yamnotri Temple" class="showcase-image" loading="lazy"/>
+          <h3 class="showcase-title">YAMNOTRI TEMPLE</h3>
+          <p id="desc-yamnotri" class="sr-only">Intricate laser-cut handcrafted model of Yamnotri Temple.</p>
+        </div>
+        <div class="showcase-item" role="listitem" tabindex="0" aria-describedby="desc-golden">
+          <img src="https://assets.onecompiler.app/43k6yjsns/43k6yjdrv/CHHC4971.JPG" alt="Model of Golden Temple" class="showcase-image" loading="lazy"/>
+          <h3 class="showcase-title">GOLDEN TEMPLE</h3>
+          <p id="desc-golden" class="sr-only">Handcrafted model featuring the architectural details of the Golden Temple.</p>
+        </div>
+        <div class="showcase-item" role="listitem" tabindex="0" aria-describedby="desc-bigben">
+          <img src="https://assets.onecompiler.app/43k6yjsns/43k6yjdrv/TLRI6739.JPG" alt="Model of Big Ben" class="showcase-image" loading="lazy"/>
+          <h3 class="showcase-title">BIG BEN</h3>
+          <p id="desc-bigben" class="sr-only">Laser-cut model portraying the iconic Big Ben clock tower in London.</p>
+        </div>
+        <div class="showcase-item" role="listitem" tabindex="0" aria-describedby="desc-eiffel">
+          <img src="https://assets.onecompiler.app/43k6yjsns/43k6yjdrv/UUSU1424.JPG" alt="Model of Eiffel Tower" class="showcase-image" loading="lazy"/>
+          <h3 class="showcase-title">EIFFEL TOWER</h3>
+          <p id="desc-eiffel" class="sr-only">Detailed handcrafted model of the Eiffel Tower's architectural design.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="art-of-laser-cutting" aria-label="The Art and Craftsmanship of Laser Cutting">
+      <h2>The Art of Laser Cutting</h2>
+      <div class="two-col">
+        <div>
+          <h3>Precision Craftsmanship</h3>
+          <p>Our lasers cut with incredible accuracy, reaching tolerances as fine as 0.01mm, ensuring perfect fit and detail.</p>
+        </div>
+        <div>
+          <h3>Handmade Assembly</h3>
+          <p>Despite high-tech cutting, each piece is carefully assembled by hand, adding authenticity and artistry.</p>
+          <h3>Time Intensive</h3>
+          <p>Each design involves 12-20 hours of skilled labor, balancing machine precision and human touch.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="materials" aria-label="Materials and Sustainability">
+      <h2>Materials and Sustainability</h2>
+      <ul>
+        <li><strong>Eco-Friendly Wood:</strong> We use FSC-certified birch plywood, promoting responsible forest management.</li>
+        <li><strong>Safe Finishes:</strong> Water-based, non-toxic adhesives and finishes protect health and the environment.</li>
+        <li><strong>Built to Last:</strong> Our models are durable, designed to preserve their beauty for decades.</li>
+        <li><strong>Sustainable Packaging:</strong> Recycled and recyclable materials ensure minimal environmental impact.</li>
+      </ul>
+    </section>
+
+    <section id="custom-designs" aria-label="Custom Design Options">
+      <h2>Custom Designs</h2>
+      <ol>
+        <li><strong>Personalized Models:</strong> Create custom replicas of your home, local landmarks, or dream buildings with tailored size and details.</li>
+        <li><strong>Customization Options:</strong> Choose materials, add LED lighting, and select elegant display cases for your unique piece.</li>
+        <li><strong>Consultation & Production:</strong> Our process includes design consultations, approvals, and a 4-6 week creation timeline.</li>
+        <li><strong>Pricing:</strong> Quotes vary based on complexity and scale to ensure value and quality.</li>
+      </ol>
+    </section>
+
+    <section id="pricing" aria-label="Pricing and Purchase Information">
+      <h2>Pricing and Purchasing</h2>
+      <p>Models range from <strong>₹1200- ₹2000</strong> for compact designs to <strong>₹4000- ₹6000</strong> for large, intricate masterpieces.</p>
+      <p><strong>Payment & Shipping:</strong> Secure payment options include credit cards, Debit cards, BHIM-UPI and Apple Pay. We ship worldwide via trusted carriers like FedEx, UPS, and DHL.</p>
+      <p><strong>Returns:</strong> Enjoy a 7-day money-back guarantee, ensuring you're happy with your purchase.</p>
+    </section>
+
+    <section id="testimonials" aria-label="Customer Testimonials">
+      <h2>Customer Testimonials</h2>
+      <blockquote class="testimonial" tabindex="0" aria-label="Testimonial from John S., New York">
+        "The detail is incredible! A true work of art."
+        <strong>- John S., New York</strong>
+      </blockquote>
+      <blockquote class="testimonial" tabindex="0" aria-label="Testimonial from Emily L., London">
+        "Perfect gift for architecture enthusiasts."
+        <strong>- Emily L., London</strong>
+      </blockquote>
+      <blockquote class="testimonial" tabindex="0" aria-label="Testimonial from David K., Sydney">
+        "Exceptional quality and customer service."
+        <strong>- David K., Sydney</strong>
+      </blockquote>
+    </section>
+
+    <section id="stay-connected" aria-label="Stay connected and contact information">
+      <h2>Stay Connected</h2>
+      <p>Subscribe to our newsletter for updates, special offers, and new designs.</p>
+      <form id="newsletter-form" aria-label="Newsletter sign-up form" novalidate>
+        <label for="email" class="sr-only">Email address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required aria-required="true" />
+        <button type="submit" aria-label="Subscribe to newsletter">Subscribe</button>
+      </form>
+
+      <h3>Follow us on Social Media</h3>
+      <p>
+        <a href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">Facebook</a> |
+        <a href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">Instagram</a> |
+        <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+      </p>
+      <h3>Contact Information</h3>
+      <p>Email: <a href="mailto:info@artlasermodels.com">cut-to-degsin@gmail.com</a></p>
+      <p>Phone: +91 935644785</p>
+      <h3>FAQs</h3>
+      <p>For frequently asked questions, please <a href="#faq-section">visit our FAQs page</a>.</p>
+    </section>
+  </main>
+
+  <div id="zoom-overlay" class="zoom-overlay" aria-hidden="true" role="dialog" aria-label="Enlarged image view">
+    <img src="" alt="" />
+  </div>
+
+  <footer>
+    <p>© 2024 ArtLaserModels. All rights reserved. | Designed by Visionary Craftsmen</p>
+  </footer>
+
+  <script>
+    // Image Zoom
+    const zoomOverlay = document.getElementById('zoom-overlay');
+    const zoomImage = zoomOverlay.querySelector('img');
+    const showcaseItems = document.querySelectorAll('.showcase-item');
+
+    showcaseItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        zoomImage.src = img.src;
+        zoomImage.alt = img.alt;
+        zoomOverlay.classList.add('visible');
+        zoomOverlay.setAttribute('aria-hidden', 'false');
+        zoomOverlay.focus();
+      });
+      item.addEventListener('keypress', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+
+    zoomOverlay.addEventListener('click', () => {
+      zoomOverlay.classList.remove('visible');
+      zoomOverlay.setAttribute('aria-hidden', 'true');
+      zoomImage.src = '';
+      zoomImage.alt = '';
+    });
+
+    zoomOverlay.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        zoomOverlay.click();
+      }
+    });
+
+    // Newsletter form handling
+    const form = document.getElementById('newsletter-form');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const emailInput = form.email;
+      if (!emailInput.validity.valid) {
+        alert('Please enter a valid email address.');
+        emailInput.focus();
+        return;
+      }
+      alert(`Thank you for subscribing, ${emailInput.value}!`);
+      form.reset();
+    });
+  </script>
+
+  <style>
+    /* Screen reader only */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  </style>
+</body>
+</html>
